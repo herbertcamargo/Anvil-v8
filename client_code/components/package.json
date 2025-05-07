@@ -1,32 +1,18 @@
 {
   "name": "anvil-components",
   "version": "1.0.0",
-  "description": "Modern web components for Anvil",
+  "description": "Anvil components for YouTube integration",
   "scripts": {
     "build": "webpack --mode production",
-    "dev": "webpack --mode development --watch",
-    "build-sw": "node scripts/build-service-worker.js",
-    "build-all": "npm run build && npm run build-sw"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.16.0",
-    "@babel/preset-env": "^7.16.0",
-    "@babel/preset-react": "^7.16.0",
-    "@vue/compiler-sfc": "^3.2.22",
-    "babel-loader": "^8.2.3",
-    "css-loader": "^6.5.1",
-    "fs-extra": "^11.1.1",
-    "style-loader": "^3.3.1",
-    "uglify-js": "^3.17.4",
-    "vue-loader": "^16.8.3",
-    "webpack": "^5.64.1",
-    "webpack-cli": "^4.9.1"
+    "dev": "webpack --mode development --watch"
   },
   "dependencies": {
-    "@apollo/client": "^3.7.10",
-    "graphql": "^16.6.0",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "vue": "^3.2.22"
+    "typescript": "^4.9.5"
+  },
+  "devDependencies": {
+    "@types/node": "^18.15.11",
+    "ts-loader": "^9.4.2",
+    "webpack": "^5.80.0",
+    "webpack-cli": "^5.0.2"
   }
 } 
