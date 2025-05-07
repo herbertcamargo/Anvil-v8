@@ -1,1 +1,57 @@
-!function(e,o){"object"==typeof exports&&"object"==typeof module?module.exports=o():"function"==typeof define&&define.amd?define([],o):"object"==typeof exports?exports.YouTubePlayer=o():e.YouTubePlayer=o()}(this,(()=>(()=>{"use strict";var e=function(){function e(){}return e.prototype.loadVideo=function(e,o){return new Promise((function(n,t){try{console.log("Loading video: ".concat(e," - ").concat(o)),n({videoId:e,title:o})}catch(e){console.error("Error loading video: ".concat(e)),t(e)}}))},e.prototype.setupThumbnailHandlers=function(){var e=this;console.log("Setting up YouTube thumbnail handlers"),window.handleThumbnailClick=function(o){e.handleThumbnailClick(o)}},e.prototype.handleThumbnailClick=function(e){var o=new CustomEvent("thumbnail-click",{detail:{index:e},bubbles:!0,cancelable:!0});document.dispatchEvent(o)},e}();return window.YouTubePlayer=new e,{}})()));
+/**
+ * YouTubePlayer.js
+ * Handles YouTube video player functionality
+ */
+
+(function() {
+  window.YouTubePlayer = {
+    /**
+     * Load a YouTube video
+     * @param {string} videoId - YouTube video ID
+     * @param {string} title - Video title
+     * @returns {Promise} - Promise that resolves when video is loaded
+     */
+    loadVideo: function(videoId, title) {
+      return new Promise(function(resolve) {
+        const playerContainer = document.getElementById('youtube-player');
+        if (!playerContainer) {
+          resolve({ error: 'Player container not found' });
+          return;
+        }
+        
+        // Update title if available
+        const titleElement = document.querySelector('.video-title-display');
+        if (titleElement && title) {
+          titleElement.textContent = title;
+        }
+        
+        // Create iframe
+        playerContainer.innerHTML = `
+          <iframe 
+            src="https://www.youtube.com/embed/${videoId}?autoplay=1" 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen
+            class="youtube-iframe">
+          </iframe>
+        `;
+        
+        resolve({ success: true });
+      });
+    },
+    setupThumbnailHandlers: function() {
+      console.log("Setting up YouTube thumbnail handlers");
+      window.handleThumbnailClick = function(index) {
+        YouTubePlayer.handleThumbnailClick(index);
+      };
+    },
+    handleThumbnailClick: function(index) {
+      var o = new CustomEvent("thumbnail-click", {
+        detail: { index: index },
+        bubbles: true,
+        cancelable: true
+      });
+      document.dispatchEvent(o);
+    }
+  };
+})();

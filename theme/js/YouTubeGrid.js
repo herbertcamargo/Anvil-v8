@@ -1,1 +1,54 @@
-!function(t,i){"object"==typeof exports&&"object"==typeof module?module.exports=i():"function"==typeof define&&define.amd?define([],i):"object"==typeof exports?exports.YouTubeGrid=i():t.YouTubeGrid=i()}(this,(()=>(()=>{"use strict";return{717:function(){var t=this&&this.__assign||function(){return t=Object.assign||function(t){for(var i,n=1,e=arguments.length;n<e;n++)for(var o in i=arguments[n])Object.prototype.hasOwnProperty.call(i,o)&&(t[o]=i[o]);return t},t.apply(this,arguments)},i=this&&this.__spreadArray||function(t,i,n){if(n||2===arguments.length)for(var e,o=0,r=i.length;o<r;o++)!e&&o in i||(e||(e=Array.prototype.slice.call(i,0,o)),e[o]=i[o]);return t.concat(e||Array.prototype.slice.call(i))},n=function(){function n(i){this.videos=[],this.container=null,this.options=t(t({},i),{maxVideos:i.maxVideos||12,columns:i.columns||3}),this.initialize()}return n.prototype.initialize=function(){this.container=document.querySelector(this.options.containerSelector),this.container?this.applyGridStyling():console.error("YouTubeGrid: Container element not found with selector ".concat(this.options.containerSelector))},n.prototype.applyGridStyling=function(){this.container&&(this.container.style.display="grid",this.container.style.gridTemplateColumns="repeat(auto-fill, minmax(240px, 1fr))",this.container.style.gap="20px",this.container.style.padding="20px",this.container.style.width="100%")},n.prototype.updateGrid=function(t){this.videos=t.slice(0,this.options.maxVideos),this.render()},n.prototype.createThumbnailHTML=function(t,i){var n=t.id||"",e=t.title||"Untitled video",o=t.thumbnail_url||this.options.defaultThumbnail;return'\n      <div class="thumbnail-container" data-index="'.concat(i,'" data-video-id="').concat(n,'" onclick="handleThumbnailClick(').concat(i,')">\n        <img src="').concat(o,'" alt="').concat(e,'" class="thumbnail-image" \n          onerror="this.onerror=null; this.src=\'').concat(this.options.defaultThumbnail,'\'">\n        <p class="video-title">').concat(e,"</p>\n      </div>\n    ")},n.prototype.createEmptyStateHTML=function(){return'\n      <div style="text-align: center; padding: 40px; width: 100%;">\n        <div style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 30px; background-color: #f8f9fa; display: inline-block; max-width: 600px;">\n          <h3 style="color: #6c757d; margin-bottom: 15px;">No Videos Found</h3>\n          <p style="color: #6c757d;">Enter a search term and connect to the YouTube API to display real video results.</p>\n          <p style="color: #6c757d; font-size: 0.9em; margin-top: 15px;">This application does not display pre-loaded dummy videos.</p>\n        </div>\n      </div>\n    '},n.prototype.render=function(){var t=this;if(this.container)if(this.container.innerHTML="",0!==this.videos.length){var i="";this.videos.forEach((function(n,e){i+=t.createThumbnailHTML(n,e)})),this.container.innerHTML=i,this.options.onThumbnailClick&&this.setupClickHandlers()}else this.container.innerHTML=this.createEmptyStateHTML()},n.prototype.setupClickHandlers=function(){var t=this;this.container&&this.container.querySelectorAll(".thumbnail-container").forEach((function(i){i.addEventListener("click",(function(i){var n=i.currentTarget,e=parseInt(n.getAttribute("data-index")||"0"),o=n.getAttribute("data-video-id")||"";t.options.onThumbnailClick&&t.options.onThumbnailClick(e,o)}))}))},n.prototype.getVideos=function(){return i([],this.videos,!0)},n.prototype.getVideoAt=function(t){return t>=0&&t<this.videos.length?this.videos[t]:null},n}();window.YouTubeGrid=n}}[717](),{}})()));
+/**
+ * YouTubeGrid.js
+ * Handles YouTube video grid functionality
+ */
+
+(function() {
+  window.YouTubeGrid = {
+    /**
+     * Render video thumbnails in the grid
+     * @param {Array} videos - Array of video objects
+     * @param {string} defaultThumbnail - Default thumbnail URL
+     */
+    renderVideos: function(videos, defaultThumbnail) {
+      const gridContainer = document.getElementById('youtube-grid');
+      if (!gridContainer) return;
+      
+      // Clear existing thumbnails
+      gridContainer.innerHTML = '';
+      
+      if (!videos || videos.length === 0) {
+        gridContainer.innerHTML = '<p style="padding: 20px; text-align: center; color: #666;">No videos found</p>';
+        return;
+      }
+      
+      // Add thumbnails
+      videos.forEach(function(video, index) {
+        const thumbnailContainer = document.createElement('div');
+        thumbnailContainer.className = 'thumbnail-container';
+        thumbnailContainer.setAttribute('data-index', index);
+        thumbnailContainer.onclick = function() {
+          window.handleThumbnailClick(index);
+        };
+        
+        const img = document.createElement('img');
+        img.className = 'thumbnail-image';
+        img.src = video.thumbnailUrl || defaultThumbnail;
+        img.alt = video.title || 'Video thumbnail';
+        
+        // Apply placeholder if image fails to load
+        if (window.PlaceholderHandler) {
+          window.PlaceholderHandler.applyPlaceholder(img, defaultThumbnail);
+        }
+        
+        const title = document.createElement('h3');
+        title.className = 'video-title';
+        title.textContent = video.title || 'Untitled video';
+        
+        thumbnailContainer.appendChild(img);
+        thumbnailContainer.appendChild(title);
+        gridContainer.appendChild(thumbnailContainer);
+      });
+    }
+  };
+})();

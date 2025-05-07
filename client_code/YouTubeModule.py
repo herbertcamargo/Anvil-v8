@@ -248,24 +248,27 @@ class YouTubeIntegration:
         Args:
             videos_data: List of video dictionaries
         """
+        if not videos_data:
+            videos_data = []
+        
+        # Store the videos for reference
         self.videos = videos_data
         
-        # Get the HTML container
-        grid_container = anvil.js.get_dom_node(self.grid_html).querySelector('.yt-grid-container')
-        if not grid_container:
-            print("Error: Could not find grid container")
-            alert("Could not find grid container")
-            return
-            
-        # Create a new YouTubeGrid instance with our grid container
-        grid = anvil.js.window.YouTubeGrid({
-            'containerSelector': '#youtube-grid',
-            'defaultThumbnail': self.default_thumbnail,
-            'maxVideos': 12
-        })
+        # Convert any keys to the expected format
+        formatted_videos = []
+        for video in videos_data:
+            formatted_video = {
+                'id': video.get('id', ''),
+                'title': video.get('title', 'Untitled video'),
+                'thumbnailUrl': video.get('thumbnailUrl', self.default_thumbnail)
+            }
+            formatted_videos.append(formatted_video)
         
-        # Update the grid with our videos
-        grid.updateGrid(videos_data)
+        # Call the JavaScript function to render the videos
+        try:
+            anvil.js.call_js('window.YouTubeGrid.renderVideos', formatted_videos, self.default_thumbnail)
+        except Exception as e:
+            print(f"Error updating videos: {e}")
     
     def add_placeholder_handler(self):
         """Add global handler to replace placeholder.com images with data URIs"""

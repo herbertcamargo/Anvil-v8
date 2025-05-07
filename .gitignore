@@ -3,6 +3,17 @@
 __pycache__
 .anvil-data
 
+# IDE files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Editor backup files
+*~
+*.bak
+*.swp
+
 # dependencies
 /node_modules
 /.pnp

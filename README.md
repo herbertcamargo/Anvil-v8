@@ -1,54 +1,60 @@
-# YouTube Video Player
+# Anvil YouTube Viewer
 
-A modern YouTube video player built with Next.js, TypeScript, and Tailwind CSS.
+A simple YouTube viewer application built with Anvil.
 
 ## Features
 
-- Modern, responsive UI
-- YouTube video grid with thumbnails
-- Video player with autoplay
-- TypeScript for type safety
-- Tailwind CSS for styling
+- Displays a grid of YouTube videos
+- Allows playing videos directly in the application
+- Responsive design for desktop and mobile
+- Clean, modern UI
 
-## Getting Started
+## Usage
 
-1. Install dependencies:
-```bash
-npm install
+This application requires Anvil to run. To use:
+
+1. Open the application in Anvil
+2. Create a form with two containers: one for the grid and one for the player
+3. Initialize the YouTubeIntegration class with these containers
+4. Load videos by calling the update_videos method with an array of video objects
+
+## Video Object Format
+
+Each video object should have this format:
+
+```python
+{
+    "id": "YouTube-Video-ID",
+    "title": "Video Title",
+    "thumbnailUrl": "URL-to-thumbnail-image"
+}
 ```
 
-2. Run the development server:
-```bash
-npm run dev
+## Example
+
+```python
+from client_code.YouTubeModule import YouTubeIntegration
+
+# In your form class
+def __init__(self, **properties):
+    self.init_components(**properties)
+    
+    # Create the integration with your containers
+    self.youtube = YouTubeIntegration(
+        form=self,
+        grid_container=self.video_grid_panel,
+        player_container=self.video_player_panel
+    )
+    
+    # Load some videos
+    videos = [
+        {
+            "id": "dQw4w9WgXcQ",
+            "title": "Never Gonna Give You Up",
+            "thumbnailUrl": "https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg"
+        },
+        # More videos...
+    ]
+    
+    self.youtube.update_videos(videos)
 ```
-
-3. Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-## Development
-
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run start` - Start production server
-- `npm run lint` - Run ESLint
-
-## Project Structure
-
-```
-src/
-├── components/
-│   └── YouTube/
-│       ├── YouTubeIntegration.tsx
-│       ├── YouTubeGrid.tsx
-│       └── YouTubePlayer.tsx
-├── pages/
-│   └── index.tsx
-└── styles/
-    └── globals.css
-```
-
-## Technologies Used
-
-- Next.js
-- TypeScript
-- Tailwind CSS
-- React
